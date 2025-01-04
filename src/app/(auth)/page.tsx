@@ -92,35 +92,35 @@ export default function AuthPage() {
     };
 
     return (
-        <main className="max-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-400 via-background-300 to-background-100 no-scrollbar">
-
-            {/* Floating Header */}
+        <main className="relative min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-400 via-background-300 to-background-100">
+            {/* Floating Header - Made Relative */}
             <motion.div
-                initial={{ y: -100, opacity: 0 }}
+                initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="absolute top-0 left-0 right-0 h-16 flex items-center justify-center"
+                className="relative w-full flex justify-center py-4"
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center">
                     <Image
                         src="/logo.svg"
                         alt="KeepThing Logo"
-                        width={150}
-                        className="rounded-lg drop-shadow-lg"
-                        style={{objectFit: "contain"}}	
+                        width={120}
+                        height={40}
+                        className="w-auto h-8 drop-shadow-lg"
+                        style={{objectFit: "contain"}}
                     />
                 </div>
             </motion.div>
 
-            {/* Main Content */}
-            <div className="container pt-24 pb-16 px-4">
-                <div className="mx-auto max-w-md space-y-2">
-                    {/* Welcome Text with Animation */}
+            {/* Main Content - Using Flex Layout */}
+            <div className="flex-1 flex flex-col justify-center w-full px-4 py-6">
+                <div className="w-full max-w-sm mx-auto space-y-4">
+                    {/* Welcome Text */}
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="space-y-2 text-center"
+                        className="text-center space-y-2"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -129,20 +129,21 @@ export default function AuthPage() {
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: -10, opacity: 0 }}
                                 transition={{ duration: 0.2 }}
+                                className="space-y-2"
                             >
                                 {authMode === "signin" ? (
                                     <>
-                                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-800">
+                                        <h1 className="text-4xl sm:text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-800">
                                             Welcome to KeepThing
                                         </h1>
-                                        <p className="text-text-700 text-lg">
+                                        <p className="text-xl sm:text-lg text-text-700">
                                             Your all-in-one space for <span className="text-primary-500">links</span>,{" "}
                                             <span className="text-secondary-500">notes</span>,{" "}
                                             <span className="text-accent-500">files</span>, and more.
                                         </p>
                                     </>
                                 ) : (
-                                    <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text">
+                                    <h1 className="text-4xl sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-800">
                                         Let's get started.
                                     </h1>
                                 )}
@@ -155,9 +156,10 @@ export default function AuthPage() {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
+                        className="w-full"
                     >
-                        <Card className="border-none shadow-2xl bg-background-50/95 backdrop-blur supports-[backdrop-filter]:bg-background-50/80">
-                            <CardContent className="space-y-6 pt-6">
+                        <Card className="border-none shadow-lg bg-background-50/95 backdrop-blur">
+                            <CardContent className="space-y-4 pt-4">
                                 {error && (
                                     <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
                                         {error}
@@ -220,10 +222,10 @@ export default function AuthPage() {
                                     />
                                 </div>
 
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-3">
                                     <Button
                                         type="submit"
-                                        className="w-full h-12 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:opacity-90"
+                                        className="w-full h-11 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:opacity-90"
                                         disabled={isLoading}
                                     >
                                         {isLoading && (
@@ -238,7 +240,7 @@ export default function AuthPage() {
                                             variant="ghost"
                                             onClick={handleForgotPassword}
                                             disabled={isLoading || !email}
-                                            className="text-sm text-muted-foreground hover:text-primary"
+                                            className="text-sm text-muted-foreground hover:text-primary h-9"
                                         >
                                             Forgot password?
                                         </Button>
@@ -274,10 +276,10 @@ export default function AuthPage() {
                                 </Tabs>
                             </CardContent>
 
-                            <CardFooter className="flex flex-col gap-6 pt-6">
+                            <CardFooter className="flex flex-col gap-4 pt-4">
                                 <div className="relative w-full">
                                     <div className="absolute inset-0 flex items-center">
-                                        <Separator className="w-full bg-muted/50" />
+                                        <Separator className="w-full" />
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
                                         <span className="bg-background px-2 text-muted-foreground">
@@ -316,7 +318,7 @@ export default function AuthPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
-                        className="text-center text-sm text-text-600"
+                        className="text-center text-xs sm:text-sm text-text-600 px-4"
                     >
                         By continuing, you agree to our{" "}
                         <a href="/terms" className="underline underline-offset-4 hover:text-primary-500 transition-colors">
