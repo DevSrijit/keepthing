@@ -242,9 +242,12 @@ export default function AuthPage() {
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={handleForgotPassword}
+                      onClick={() => {
+                        setShowForgotPassword(false);
+                        handleForgotPassword();
+                      }}
                       disabled={isLoading || !email}
-                      className="text-sm text-muted-foreground hover:text-primary h-9 bg-transparent"
+                      className="text-sm text-muted-foreground hover:text-destructive h-9 bg-transparent hover:bg-transparent"
                     >
                       Forgot password?
                     </Button>
