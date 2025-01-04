@@ -189,7 +189,7 @@ export default function AuthPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@example.com"
+                      placeholder="The address of your lost hopes"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}
@@ -200,7 +200,7 @@ export default function AuthPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <div className="flex flex-row space-x-2">
+                    <div className="flex flex-row">
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
@@ -208,8 +208,8 @@ export default function AuthPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={isLoading}
                         required
-                        className="h-12 bg-background/50"
-                        placeholder="pineappleonpizza"
+                        className="h-12 bg-background/50 mr-2"
+                        placeholder="123456789 (seriously?)"
                       />
                       <Button
                         type="button"
@@ -218,9 +218,9 @@ export default function AuthPage() {
                       >
                         {
                           showPassword ? (
-                          <EyeOffIcon className="text-black" />
+                            <EyeOffIcon className="text-black" />
                           ) : (
-                          <EyeIcon className="text-black" />
+                            <EyeIcon className="text-black" />
                           )
                         }
                       </Button>
