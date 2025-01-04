@@ -260,24 +260,22 @@ export default function AuthPage() {
                     </div>
                   </div>
 
-                  <div className="grid gap-3 w-full">
+                  <div className="gap-3 w-full flex flex-row justify-around">
                     <Button
                       variant="outline"
-                      className="h-12 hover:bg-primary-500/5 hover:border-primary-500/50 transition-all duration-300"
+                      className="h-12 w-24 transition-all duration-300 border-transparent border-r-[360]"
                       onClick={() => handleOAuthSignIn(OAuthProvider.Google)}
                       disabled={isLoading}
                     >
-                      <Icons.google className="mr-2 h-5 w-5 text-primary-500" />
-                      Continue with Google
+                      <Icons.google className="h-5 w-5 text-primary-500" />
                     </Button>
                     <Button
                       variant="outline"
-                      className="h-12 hover:bg-secondary-500/5 hover:border-secondary-500/50 transition-all duration-300"
+                      className="h-12 w-24 transition-all duration-300 border-transparent border-r-[360]"
                       onClick={() => handleOAuthSignIn(OAuthProvider.Facebook)}
                       disabled={isLoading}
                     >
-                      <Icons.facebook className="mr-2 h-5 w-5 text-secondary-500" />
-                      Continue with Facebook
+                      <Icons.facebook className="h-5 w-5 text-secondary-500" />
                     </Button>
                   </div>
                 </CardFooter>
