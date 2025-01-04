@@ -11,7 +11,7 @@ import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { account, ID, OAuthProvider } from "@/lib/appwrite";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getAuthError } from "@/lib/auth-errors";
 
 type AuthMode = "signin" | "signup";
@@ -80,7 +80,7 @@ export default function AuthPage() {
             setError(null);
             const redirectUrl = `${window.location.origin}/home`;
             const failureUrl = `${window.location.origin}/`;
-            
+
             await account.createOAuth2Session(
                 provider,
                 redirectUrl,
@@ -91,8 +91,8 @@ export default function AuthPage() {
         }
     };
 
-  return (
-        <main className="h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-400 via-background-300 to-background-100 overflow-hidden no-scrollbar">
+    return (
+        <main className="max-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-400 via-background-300 to-background-100 no-scrollbar">
 
             {/* Floating Header */}
             <motion.div
@@ -106,30 +106,48 @@ export default function AuthPage() {
                         src="/logo.svg"
                         alt="KeepThing Logo"
                         width={150}
-                        height={150}
                         className="rounded-lg drop-shadow-lg"
+                        style={{objectFit: "contain"}}	
                     />
                 </div>
             </motion.div>
 
             {/* Main Content */}
             <div className="container pt-24 pb-16 px-4">
-                <div className="mx-auto max-w-md space-y-6">
-                    {/* Welcome Text */}
+                <div className="mx-auto max-w-md space-y-2">
+                    {/* Welcome Text with Animation */}
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
                         className="space-y-2 text-center"
                     >
-                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-800">
-                            Welcome to KeepThing
-                        </h1>
-                        <p className="text-text-700 text-lg">
-                            Your all-in-one space for <span className="text-primary-500">links</span>,{" "}
-                            <span className="text-secondary-500">notes</span>,{" "}
-                            <span className="text-accent-500">files</span>, and more.
-                        </p>
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={authMode}
+                                initial={{ y: 10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -10, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {authMode === "signin" ? (
+                                    <>
+                                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-800">
+                                            Welcome to KeepThing
+                                        </h1>
+                                        <p className="text-text-700 text-lg">
+                                            Your all-in-one space for <span className="text-primary-500">links</span>,{" "}
+                                            <span className="text-secondary-500">notes</span>,{" "}
+                                            <span className="text-accent-500">files</span>, and more.
+                                        </p>
+                                    </>
+                                ) : (
+                                    <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text">
+                                        Let's get started.
+                                    </h1>
+                                )}
+                            </motion.div>
+                        </AnimatePresence>
                     </motion.div>
 
                     {/* Auth Card */}
@@ -146,102 +164,114 @@ export default function AuthPage() {
                                     </div>
                                 )}
 
-                                {/* Email Form */}
-                                <form onSubmit={handleAuth} className="space-y-4">
-                                    <motion.div
-                                        initial={false}
-                                        animate={{ height: authMode === "signup" ? "auto" : 0 }}
-                                        className="overflow-hidden"
+                                {/* Name Field with Animation */}
+                                <motion.div
+                                    initial={false}
+                                    animate={{ 
+                                        height: authMode === "signup" ? "auto" : 0,
+                                        opacity: authMode === "signup" ? 1 : 0
+                                    }}
+                                    transition={{ 
+                                        height: { duration: 0.3 },
+                                        opacity: { duration: 0.2 }
+                                    }}
+                                    className="overflow-hidden"
+                                >
+                                    {authMode === "signup" && (
+                                        <div className="space-y-2 pb-4">
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input
+                                                id="name"
+                                                placeholder="John Doe"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                disabled={isLoading}
+                                                required
+                                                className="h-12 bg-background/50"
+                                            />
+                                        </div>
+                                    )}
+                                </motion.div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled={isLoading}
+                                        required
+                                        className="h-12 bg-background/50"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={isLoading}
+                                        required
+                                        className="h-12 bg-background/50"
+                                    />
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <Button
+                                        type="submit"
+                                        className="w-full h-12 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:opacity-90"
+                                        disabled={isLoading}
                                     >
-                                        {authMode === "signup" && (
-                                            <div className="space-y-2 pb-4">
-                                                <Label htmlFor="name">Name</Label>
-                                                <Input
-                                                    id="name"
-                                                    placeholder="John Doe"
-                                                    value={name}
-                                                    onChange={(e) => setName(e.target.value)}
-                                                    disabled={isLoading}
-                                                    required
-                                                    className="h-12 bg-background/50"
-                                                />
-                                            </div>
+                                        {isLoading && (
+                                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                                         )}
-                                    </motion.div>
+                                        {authMode === "signin" ? "Sign in" : "Create account"}
+                                    </Button>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            placeholder="name@example.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            disabled={isLoading}
-                                            required
-                                            className="h-12 bg-background/50"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            disabled={isLoading}
-                                            required
-                                            className="h-12 bg-background/50"
-                                        />
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <Button 
-                                            type="submit"
-                                            className="w-full h-12 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:opacity-90"
-                                            disabled={isLoading}
+                                    {showForgotPassword && authMode === "signin" && (
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            onClick={handleForgotPassword}
+                                            disabled={isLoading || !email}
+                                            className="text-sm text-muted-foreground hover:text-primary"
                                         >
-                                            {isLoading && (
-                                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                            )}
-                                            {authMode === "signin" ? "Sign in" : "Create account"}
+                                            Forgot password?
                                         </Button>
+                                    )}
+                                </div>
 
-                                        {showForgotPassword && authMode === "signin" && (
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={handleForgotPassword}
-                                                disabled={isLoading || !email}
-                                                className="text-sm text-muted-foreground hover:text-primary"
-                                            >
-                                                Forgot password?
-                                            </Button>
-                                        )}
-                                    </div>
-
-                                    <Tabs
-                                        value={authMode}
-                                        onValueChange={(v) => setAuthMode(v as AuthMode)}
-                                        className="w-full pt-2"
-                                    >
-                                        <TabsList className="grid w-full grid-cols-2 h-12 bg-background-100/50">
-                                            <TabsTrigger 
-                                                value="signin" 
-                                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary-500/20 data-[state=active]:to-secondary-500/20"
-                                            >
-                                                Sign in
-                                            </TabsTrigger>
-                                            <TabsTrigger 
-                                                value="signup" 
-                                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary-500/20 data-[state=active]:to-accent-500/20"
-                                            >
-                                                Create account
-                                            </TabsTrigger>
-                                        </TabsList>
-                                    </Tabs>
-                                </form>
+                                <Tabs
+                                    value={authMode}
+                                    onValueChange={(v) => {
+                                        // Add smooth transition when switching modes
+                                        setAuthMode(v as AuthMode);
+                                        // Reset form fields when switching
+                                        if (v === "signin") {
+                                            setName("");
+                                        }
+                                    }}
+                                    className="w-full pt-2"
+                                >
+                                    <TabsList className="grid w-full grid-cols-2 h-12 bg-background-100/50">
+                                        <TabsTrigger
+                                            value="signin"
+                                            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary-500/20 data-[state=active]:to-secondary-500/20 transition-all duration-300"
+                                        >
+                                            Sign in
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="signup"
+                                            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary-500/20 data-[state=active]:to-accent-500/20 transition-all duration-300"
+                                        >
+                                            Create account
+                                        </TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
                             </CardContent>
 
                             <CardFooter className="flex flex-col gap-6 pt-6">
@@ -282,7 +312,7 @@ export default function AuthPage() {
                     </motion.div>
 
                     {/* Footer Text */}
-                    <motion.p 
+                    <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
@@ -298,7 +328,7 @@ export default function AuthPage() {
                         </a>
                     </motion.p>
                 </div>
-    </div>
+            </div>
         </main>
-  );
+    );
 }

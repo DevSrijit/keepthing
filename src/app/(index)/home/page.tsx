@@ -18,12 +18,12 @@ export default function HomePage() {
     };
 
     return (
-        <div className="min-h-screen p-4">
+        <div className="min-h-screen p-4 items-center flex flex-col">
             <div className="flex justify-end">
                 <Button 
                     onClick={handleLogout}
                     variant="outline"
-                    className="hover:bg-destructive/10 hover:text-destructive"
+                    className="hover:bg-destructive/10 hover:text-destructive self-center"
                 >
                     Sign out
                 </Button>
