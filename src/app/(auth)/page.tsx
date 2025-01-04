@@ -11,8 +11,10 @@ import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { account, ID, OAuthProvider } from "@/lib/appwrite";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, color } from "framer-motion";
 import { getAuthError } from "@/lib/auth-errors";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type AuthMode = "signin" | "signup";
 
@@ -25,6 +27,7 @@ export default function AuthPage() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // New state to handle hero text animation completion.
   const [heroTextDone, setHeroTextDone] = useState(false);
@@ -170,7 +173,7 @@ export default function AuthPage() {
                         <Label htmlFor="name">Name</Label>
                         <Input
                           id="name"
-                          placeholder="John Doe"
+                          placeholder="Jane Hopper"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           disabled={isLoading}
@@ -197,18 +200,34 @@ export default function AuthPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      disabled={isLoading}
-                      required
-                      className="h-12 bg-background/50"
-                    />
+                    <div className="flex flex-row space-x-2">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        disabled={isLoading}
+                        required
+                        className="h-12 bg-background/50"
+                        placeholder="pineappleonpizza"
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="h-12 w-12 bg-transparent hover:bg-slate-200"
+                      >
+                        {
+                          showPassword ? (
+                          <EyeOffIcon className="text-black" />
+                          ) : (
+                          <EyeIcon className="text-black" />
+                          )
+                        }
+                      </Button>
+                    </div>
                   </div>
 
-                  <Button 
+                  <Button
                     type="submit"
                     className="w-full h-11 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:opacity-90"
                     disabled={isLoading}
